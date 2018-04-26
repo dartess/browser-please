@@ -1,0 +1,36 @@
+{
+    "name": "browser-please",
+    "version": "1.0.0",
+    "description": "Yet another library to determine the browser by useragent",
+    "main": "index.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "build": "gulp",
+        "mocha": "mocha",
+        "eslint": "./node_modules/.bin/eslint src/parseBrowser.js",
+        "test": "npm run mocha && npm run eslint"
+    },
+    "keywords": [
+        "useragent",
+        "browser"
+    ],
+    "author": "Kozlov Sergey <dartess@mail.ru>",
+    "license": "ISC",
+    "devDependencies": {
+        "babel-core": "^6.26.0",
+        "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
+        "babel-preset-env": "^1.6.1",
+        "chai": "^4.1.2",
+        "eslint": "^4.19.1",
+        "eslint-config-airbnb-base": "^12.1.0",
+        "eslint-plugin-import": "^2.11.0",
+        "gulp": "^4.0.0",
+        "gulp-babel": "^7.0.1",
+        "gulp-rename": "^1.2.2",
+        "gulp-uglify": "^3.0.0",
+        "jsdom": "^11.9.0",
+        "mocha": "^5.1.1"
+    }
+}

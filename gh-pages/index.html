@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo browser-please</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<main>
+    <h1>Browser, please</h1>
+
+    <h3>Yet another library to determine the browser by useragent</h3>
+
+    <h4>How to use:</h4>
+
+    <p>Call <code>parseBrowser()</code> to parse current browser useragent</p>
+
+    <p>Call <code>parseBrowser(ua)</code> to parse custom useragent</p>
+
+    <p>Try it yourself in the console!</p>
+
+    <!-- todo: link to readme.md -->
+    <!-- install -->
+    <!-- usage -->
+    <!-- why... -->
+    <p>More info <a href="https://github.com">at github</a>.</p>
+
+    <h4>Demo:</h4>
+
+    <dl>
+        <dt><span class="your">your</span>browser name:</dt>
+        <dd id="name"></dd>
+        <dt><span class="your">your</span>browser version major:</dt>
+        <dd id="major"></dd>
+        <dt><span class="your">your</span>browser version with minor:</dt>
+        <dd id="minor"></dd>
+        <dt><span class="your">your</span>browser version full:</dt>
+        <dd id="full"></dd>
+        <dt><span class="your">your</span>platform:</dt>
+        <dd id="platform"></dd>
+    </dl>
+
+    <p>
+        <input type="text" id="useragent" placeholder="Paste here any useragent">
+        <button type="button" id="parseOtherString">Parse!</button>
+    </p>
+
+    <p>
+        <button type="button" id="parseMoreTests">Parse more tests</button>
+    </p>
+
+    <div id="testsResult"></div>
+</main>
+
+<script src="./testData.js"></script>
+<script src="./parseBrowser.js"></script>
+<script src="./gh-pages.js"></script>
+
+</body>
+</html>
