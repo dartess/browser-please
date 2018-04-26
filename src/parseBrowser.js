@@ -1,3 +1,46 @@
+/* eslint-disable */
+const objectKeys = Object.keys || function(o) {
+    if (o !== Object(o))
+        throw new TypeError('Object.keys called on a non-object');
+    var k=[],p;
+    for (p in o) if (Object.prototype.hasOwnProperty.call(o,p)) k.push(p);
+    return k;
+};
+
+const arrayFind = Array.prototype.find || function(predicate) {
+    if (this == null) {
+        throw new TypeError('Array.prototype.find called on null or undefined');
+    }
+    if (typeof predicate !== 'function') {
+        throw new TypeError('predicate must be a function');
+    }
+    var list = Object(this);
+    var length = list.length >>> 0;
+    var thisArg = arguments[1];
+    var value;
+
+    for (var i = 0; i < length; i++) {
+        value = list[i];
+        if (predicate.call(thisArg, value, i, list)) {
+            return value;
+        }
+    }
+    return undefined;
+};
+
+const stringIncludes = String.prototype.includes || function(search, start) {
+    if (typeof start !== 'number') {
+        start = 0;
+    }
+
+    if (start + search.length > this.length) {
+        return false;
+    } else {
+        return this.indexOf(search, start) !== -1;
+    }
+};
+/* eslint-enable */
+
 const aliasesPlatforms = {
     'Windows Phone': 'winphone',
     'Windows': 'win',
@@ -32,9 +75,9 @@ function parseBrowserName(ua) {
     } else if (/UCBrowser/.test(ua) && /U[23]/.test(ua)) {
         browser = 'UCAndroid';
     } else if (/(OPR\/|Presto)/.test(ua)) {
-        browser = ua.includes('Android') ? 'OperaMobile' : 'Opera';
+        browser = stringIncludes.call(ua, 'Android') ? 'OperaMobile' : 'Opera';
     } else if (/Firefox/.test(ua)) {
-        browser = ua.includes('Android') ? 'FirefoxAndroid' : 'Firefox';
+        browser = stringIncludes.call(ua, 'Android') ? 'FirefoxAndroid' : 'Firefox';
     } else if (/(SamsungBrowser)[ /]([\w.]+)/.test(ua)) {
         browser = 'Samsung';
     } else if (/(BB\d{1,}|RIM Tablet OS)/.test(ua)) {
@@ -43,10 +86,13 @@ function parseBrowserName(ua) {
         browser = 'Chrome';
     } else {
         // Safari detect
-        const isSafari = ua.includes('Safari');
+        const isSafari = stringIncludes.call(ua, 'Safari');
 
         // Android Mobile
-        const isAndroidMobile = ua.includes('Android') && ua.includes('Mozilla/5.0') && ua.includes('AppleWebKit');
+        const hasMozillaMark = stringIncludes.call(ua, 'Mozilla/5.0');
+        const hasAppleWebKitMark = stringIncludes.call(ua, 'AppleWebKit');
+        const hasAndroidMark = stringIncludes.call(ua, 'Android');
+        const isAndroidMobile = hasAndroidMark && hasMozillaMark && hasAppleWebKitMark;
         const androidMatches = ua.match(/Android ([\d.]+)/);
         const androidVersion = androidMatches ? parseFloat(androidMatches[1]) : null;
 
@@ -102,11 +148,11 @@ function parseBrowserVersion(ua, browser) {
             break;
         case 'Opera':
         case 'OperaMobile':
-            version = ua.match(ua.includes('Presto') ? /Version\/([\d.]+)/ : /OPR\/([\d.]+)/)[1];
+            version = ua.match(stringIncludes.call(ua, 'Presto') ? /Version\/([\d.]+)/ : /OPR\/([\d.]+)/)[1];
             break;
         case 'Explorer':
         case 'ExplorerMobile':
-            version = ua.match(ua.includes('MSIE') ? /MSIE ([\d.]+)/ : /rv:([\d.]+)/)[1];
+            version = ua.match(stringIncludes.call(ua, 'MSIE') ? /MSIE ([\d.]+)/ : /rv:([\d.]+)/)[1];
             break;
         case 'Chrome':
         case 'ChromeAndroid':
@@ -162,8 +208,9 @@ function parseBrowserPlatform(ua, browser) {
             platform = 'android';
             break;
         default: {
-            const platformName = Object.keys(aliasesPlatforms)
-                .find(platformAlias => ua.includes(platformAlias));
+            const keysAliasesPlatforms = objectKeys(aliasesPlatforms);
+            const arrayFindCalback = platformAlias => stringIncludes.call(ua, platformAlias);
+            const platformName = arrayFind.call(keysAliasesPlatforms, arrayFindCalback);
             platform = aliasesPlatforms[platformName];
         }
     }
