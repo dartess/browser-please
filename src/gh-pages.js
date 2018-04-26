@@ -12,14 +12,14 @@ const $parseOtherString = document.getElementById('parseOtherString');
 const $parseMoreTests = document.getElementById('parseMoreTests');
 const $testsResult = document.getElementById('testsResult');
 
-$parseOtherString.addEventListener('click', () => {
+$parseOtherString.onclick = () => {
     [].forEach.call(document.querySelectorAll('.your'), (item) => {
         item.parentNode.removeChild(item);
     });
     displayData(parseBrowser($useragent.value));
-});
+};
 
-$parseMoreTests.addEventListener('click', () => {
+$parseMoreTests.onclick = () => {
     $parseMoreTests.style.display = 'none';
     $testsResult.innerHTML = `
             <table>
@@ -65,7 +65,7 @@ $parseMoreTests.addEventListener('click', () => {
                 }).join('')
 }
             </table>`;
-});
+};
 
 displayData(browser);
 
