@@ -13,6 +13,50 @@
 })(this, function (module) {
     'use strict';
 
+    /* eslint-disable */
+    var objectKeys = Object.keys || function (o) {
+        if (o !== Object(o)) throw new TypeError('Object.keys called on a non-object');
+        var k = [],
+            p;
+        for (p in o) {
+            if (Object.prototype.hasOwnProperty.call(o, p)) k.push(p);
+        }return k;
+    };
+
+    var arrayFind = Array.prototype.find || function (predicate) {
+        if (this == null) {
+            throw new TypeError('Array.prototype.find called on null or undefined');
+        }
+        if (typeof predicate !== 'function') {
+            throw new TypeError('predicate must be a function');
+        }
+        var list = Object(this);
+        var length = list.length >>> 0;
+        var thisArg = arguments[1];
+        var value;
+
+        for (var i = 0; i < length; i++) {
+            value = list[i];
+            if (predicate.call(thisArg, value, i, list)) {
+                return value;
+            }
+        }
+        return undefined;
+    };
+
+    var stringIncludes = String.prototype.includes || function (search, start) {
+        if (typeof start !== 'number') {
+            start = 0;
+        }
+
+        if (start + search.length > this.length) {
+            return false;
+        } else {
+            return this.indexOf(search, start) !== -1;
+        }
+    };
+    /* eslint-enable */
+
     var aliasesPlatforms = {
         'Windows Phone': 'winphone',
         'Windows': 'win',
@@ -47,9 +91,9 @@
         } else if (/UCBrowser/.test(ua) && /U[23]/.test(ua)) {
             browser = 'UCAndroid';
         } else if (/(OPR\/|Presto)/.test(ua)) {
-            browser = ua.includes('Android') ? 'OperaMobile' : 'Opera';
+            browser = stringIncludes.call(ua, 'Android') ? 'OperaMobile' : 'Opera';
         } else if (/Firefox/.test(ua)) {
-            browser = ua.includes('Android') ? 'FirefoxAndroid' : 'Firefox';
+            browser = stringIncludes.call(ua, 'Android') ? 'FirefoxAndroid' : 'Firefox';
         } else if (/(SamsungBrowser)[ /]([\w.]+)/.test(ua)) {
             browser = 'Samsung';
         } else if (/(BB\d{1,}|RIM Tablet OS)/.test(ua)) {
@@ -58,10 +102,13 @@
             browser = 'Chrome';
         } else {
             // Safari detect
-            var isSafari = ua.includes('Safari');
+            var isSafari = stringIncludes.call(ua, 'Safari');
 
             // Android Mobile
-            var isAndroidMobile = ua.includes('Android') && ua.includes('Mozilla/5.0') && ua.includes('AppleWebKit');
+            var hasMozillaMark = stringIncludes.call(ua, 'Mozilla/5.0');
+            var hasAppleWebKitMark = stringIncludes.call(ua, 'AppleWebKit');
+            var hasAndroidMark = stringIncludes.call(ua, 'Android');
+            var isAndroidMobile = hasAndroidMark && hasMozillaMark && hasAppleWebKitMark;
             var androidMatches = ua.match(/Android ([\d.]+)/);
             var androidVersion = androidMatches ? parseFloat(androidMatches[1]) : null;
 
@@ -117,11 +164,11 @@
                 break;
             case 'Opera':
             case 'OperaMobile':
-                version = ua.match(ua.includes('Presto') ? /Version\/([\d.]+)/ : /OPR\/([\d.]+)/)[1];
+                version = ua.match(stringIncludes.call(ua, 'Presto') ? /Version\/([\d.]+)/ : /OPR\/([\d.]+)/)[1];
                 break;
             case 'Explorer':
             case 'ExplorerMobile':
-                version = ua.match(ua.includes('MSIE') ? /MSIE ([\d.]+)/ : /rv:([\d.]+)/)[1];
+                version = ua.match(stringIncludes.call(ua, 'MSIE') ? /MSIE ([\d.]+)/ : /rv:([\d.]+)/)[1];
                 break;
             case 'Chrome':
             case 'ChromeAndroid':
@@ -165,10 +212,8 @@
 
         switch (browser) {
             case 'Explorer':
-                {
-                    platform = 'win';
-                    break;
-                }
+                platform = 'win';
+                break;
             case 'ExplorerMobile':
                 platform = 'winphone';
                 break;
@@ -180,9 +225,11 @@
                 break;
             default:
                 {
-                    var platformName = Object.keys(aliasesPlatforms).find(function (platformAlias) {
-                        return ua.includes(platformAlias);
-                    });
+                    var keysAliasesPlatforms = objectKeys(aliasesPlatforms);
+                    var arrayFindCalback = function arrayFindCalback(platformAlias) {
+                        return stringIncludes.call(ua, platformAlias);
+                    };
+                    var platformName = arrayFind.call(keysAliasesPlatforms, arrayFindCalback);
                     platform = aliasesPlatforms[platformName];
                 }
         }
