@@ -26,6 +26,10 @@ button {
     vertical-align: middle;
 }
 
+.value {
+    font-weight: bold;
+}
+
 #testsResult th {
     text-align: left;
 }
