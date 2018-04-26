@@ -20,7 +20,7 @@ $parseOtherString.onclick = () => {
 };
 
 $parseMoreTests.onclick = () => {
-    $parseMoreTests.style.display = 'none';
+    $parseMoreTests.style.display = `none`;
     $testsResult.innerHTML = `
             <table>
                 <tr>
