@@ -11,7 +11,7 @@
         "mocha": "mocha",
         "eslint": "./node_modules/.bin/eslint src/parseBrowser.js",
         "test": "npm run mocha && npm run eslint",
-        "pages": "node -e \"require('gh-pages').publish('gh-pages', function(){process.exit(1)})\""
+        "pages": "node -e \"require('gh-pages').publish('gh-pages', function(){})\""
     },
     "keywords": [
         "useragent",
