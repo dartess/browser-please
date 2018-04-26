@@ -62,8 +62,8 @@ $parseMoreTests.onclick = () => {
                             </td>
                         </tr>
                         `;
-                }).join('')
-}
+                    }).join('')
+                }
             </table>`;
 };
 
