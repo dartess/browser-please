@@ -35,13 +35,9 @@ browser = parseBrowser([ua])
 **browser**: object with parsed info, where:
 
 * **browser.name**: name of browser or empty string if not detect;
-
 * **browser.version.major**: major version of browser or zero if not detect;
-
 * **browser.version.minor**: major and minor version of browser or zero if not detect;
-
 * **browser.version.full**: full version of browser or zero if not detect;
-
 * **browser.platform**: name of browser or empty string if not detect;
 
 ## Supported browsers:
