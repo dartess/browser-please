@@ -149,10 +149,9 @@ function parseBrowserPlatform(ua, browser) {
     let platform;
 
     switch (browser) {
-        case 'Explorer': {
+        case 'Explorer':
             platform = 'win';
             break;
-        }
         case 'ExplorerMobile':
             platform = 'winphone';
             break;
